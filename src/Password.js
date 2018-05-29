@@ -14,26 +14,34 @@ class Password extends Component {
   }
   render() {
     let errorpassword = "";
+    let regexOne = new RegExp("[a-z]+");
+    let regexTwo = new RegExp("[A-Z]+");
+    let regexThree = new RegExp(/[-.?!:;()+^=]{1,}/);
 
-    let regexThree = new RegExp(/[-.?!+^]{1,}[a-z]+[A-Z]+/);
-
+    const resulRegexOne = regexOne.test(this.state.password);
+    const resulRegexTwo = regexTwo.test(this.state.password);
     const resulRegexThree = regexThree.test(this.state.password);
 
-    console.log(resulRegexThree);
+    console.log(resulRegexOne, resulRegexTwo, resulRegexThree);
 
-    if (this.state.password.length >= 6 && resulRegexThree) {
+    if (
+      this.state.password.length >= 6 &&
+      resulRegexOne &&
+      resulRegexTwo &&
+      resulRegexThree
+    ) {
       errorpassword = "mot de passe fort";
     } else if (
-      this.state.password.length < 6 &&
-      this.state.password.length > 0
+      this.state.password.length > 6 &&
+      resulRegexTwo &&
+      resulRegexOne
     ) {
-      errorpassword = "mot de passe faible";
-    } else if (this.state.password.length >= 6) {
       errorpassword = "mot de passe moyen";
+    } else if (this.state.password.length > 0) {
+      errorpassword = "mot de passe faible";
     } else {
       errorpassword = null;
     }
-
     return (
       <div className="container-fluid">
         <div className="row justify-content-center ">
@@ -56,9 +64,7 @@ class Password extends Component {
                   Submit
                 </button>
               ) : (
-                <button type="submit" className="btn btn-primary mt-1 disabled">
-                  Submit
-                </button>
+                <div className="btn btn-primary mt-1 disabled">Submit</div>
               )}
             </form>
           </div>
